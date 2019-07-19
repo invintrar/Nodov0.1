@@ -34,10 +34,8 @@ int main(void) {
     char valorX = 0;
     banderInt = 0;
     banderCont = 0;
-    //char bufferX[512];
 
     SYSTEM_Initialize();
-
 
     /*Encendemos el ADXL255*/
     ADXL355_Write_Byte(POWER_CTL, MEASURING);
