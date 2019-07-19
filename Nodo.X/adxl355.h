@@ -123,7 +123,7 @@
  VARIABLE DECLARATIONS
  -----------------------------------------------------------------------------*/
 extern int dataBuffer[3];
-extern char dataCBuffer[420];
+extern char dataCBuffer[63];
 
 /*----------------------------------------------------------------------------
  FUNCTION PROTOTYPES

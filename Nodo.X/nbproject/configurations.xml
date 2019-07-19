@@ -7,7 +7,6 @@
       <itemPath>adxl355.h</itemPath>
       <itemPath>ext_int.h</itemPath>
       <itemPath>interrupt_manager.h</itemPath>
-      <itemPath>lcd.h</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>osc.h</itemPath>
       <itemPath>pines_conf.h</itemPath>
@@ -25,7 +24,6 @@
       <itemPath>adxl355.c</itemPath>
       <itemPath>ext_int.c</itemPath>
       <itemPath>interrupt_manager.c</itemPath>
-      <itemPath>lcd.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>osc.c</itemPath>
       <itemPath>pines_conf.c</itemPath>

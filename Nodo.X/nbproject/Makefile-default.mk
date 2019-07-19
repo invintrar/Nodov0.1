@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=adxl355.c ext_int.c interrupt_manager.c lcd.c main.c osc.c pines_conf.c sdcard.c spi1.c system.c
+SOURCEFILES_QUOTED_IF_SPACED=adxl355.c ext_int.c interrupt_manager.c main.c osc.c pines_conf.c sdcard.c spi1.c system.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/adxl355.o ${OBJECTDIR}/ext_int.o ${OBJECTDIR}/interrupt_manager.o ${OBJECTDIR}/lcd.o ${OBJECTDIR}/main.o ${OBJECTDIR}/osc.o ${OBJECTDIR}/pines_conf.o ${OBJECTDIR}/sdcard.o ${OBJECTDIR}/spi1.o ${OBJECTDIR}/system.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/adxl355.o.d ${OBJECTDIR}/ext_int.o.d ${OBJECTDIR}/interrupt_manager.o.d ${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/osc.o.d ${OBJECTDIR}/pines_conf.o.d ${OBJECTDIR}/sdcard.o.d ${OBJECTDIR}/spi1.o.d ${OBJECTDIR}/system.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/adxl355.o ${OBJECTDIR}/ext_int.o ${OBJECTDIR}/interrupt_manager.o ${OBJECTDIR}/main.o ${OBJECTDIR}/osc.o ${OBJECTDIR}/pines_conf.o ${OBJECTDIR}/sdcard.o ${OBJECTDIR}/spi1.o ${OBJECTDIR}/system.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/adxl355.o.d ${OBJECTDIR}/ext_int.o.d ${OBJECTDIR}/interrupt_manager.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/osc.o.d ${OBJECTDIR}/pines_conf.o.d ${OBJECTDIR}/sdcard.o.d ${OBJECTDIR}/spi1.o.d ${OBJECTDIR}/system.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/adxl355.o ${OBJECTDIR}/ext_int.o ${OBJECTDIR}/interrupt_manager.o ${OBJECTDIR}/lcd.o ${OBJECTDIR}/main.o ${OBJECTDIR}/osc.o ${OBJECTDIR}/pines_conf.o ${OBJECTDIR}/sdcard.o ${OBJECTDIR}/spi1.o ${OBJECTDIR}/system.o
+OBJECTFILES=${OBJECTDIR}/adxl355.o ${OBJECTDIR}/ext_int.o ${OBJECTDIR}/interrupt_manager.o ${OBJECTDIR}/main.o ${OBJECTDIR}/osc.o ${OBJECTDIR}/pines_conf.o ${OBJECTDIR}/sdcard.o ${OBJECTDIR}/spi1.o ${OBJECTDIR}/system.o
 
 # Source Files
-SOURCEFILES=adxl355.c ext_int.c interrupt_manager.c lcd.c main.c osc.c pines_conf.c sdcard.c spi1.c system.c
+SOURCEFILES=adxl355.c ext_int.c interrupt_manager.c main.c osc.c pines_conf.c sdcard.c spi1.c system.c
 
 
 CFLAGS=
@@ -114,13 +114,6 @@ ${OBJECTDIR}/interrupt_manager.o: interrupt_manager.c  nbproject/Makefile-${CND_
 	@${RM} ${OBJECTDIR}/interrupt_manager.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  interrupt_manager.c  -o ${OBJECTDIR}/interrupt_manager.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interrupt_manager.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/interrupt_manager.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/lcd.o: lcd.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/lcd.o.d 
-	@${RM} ${OBJECTDIR}/lcd.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  lcd.c  -o ${OBJECTDIR}/lcd.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/lcd.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off  
-	@${FIXDEPS} "${OBJECTDIR}/lcd.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -185,13 +178,6 @@ ${OBJECTDIR}/interrupt_manager.o: interrupt_manager.c  nbproject/Makefile-${CND_
 	@${RM} ${OBJECTDIR}/interrupt_manager.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  interrupt_manager.c  -o ${OBJECTDIR}/interrupt_manager.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interrupt_manager.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/interrupt_manager.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/lcd.o: lcd.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/lcd.o.d 
-	@${RM} ${OBJECTDIR}/lcd.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  lcd.c  -o ${OBJECTDIR}/lcd.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/lcd.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off  
-	@${FIXDEPS} "${OBJECTDIR}/lcd.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
