@@ -12,10 +12,18 @@
  PROGRAM CONSTANTS
  ----------------------------------------------------------------------------*/
 #define	SPI2_H
-#define SS1_SetDigitalOutput()  _TRISB0 = 0
-#define SD_SS2_Toggle()         _LATB0 ^= 1 
-#define SD_SS2_SetLow()         _LATB0 = 0
-#define SD_SS2_SetHigh()        _LATB0 = 1
+#define SS2_SetDigitalOutput()  _TRISB6 = 0
+#define SS2_SetDigitalInput()   _TRISB6 = 1
+#define SD_SS_Toggle()          _LATB6 ^= 1 
+#define SD_SS_SetLow()          _LATB6 = 0
+#define SD_SS_SetHigh()         _LATB6 = 1
+
+#define CD_SetDigitalOutput()   _TRISB13 = 0
+#define CD_SetDigitalInput()    _TRISB6 = 0
+#define SD_CD_Toggle()          _LATB13 ^= 1 
+#define SD_CD_SetLow()          _LATB13 = 0
+#define SD_CD_SetHigh()         _LATB13 = 1
+
 
 /*Elegir velocidad en la transmisión*/
 #define FAST 1//Frecuencia reloj 5Mhz
@@ -26,11 +34,10 @@
  FUCTION PROTOTYPES
  -----------------------------------------------------------------------------*/
 
-
 /**
  * @param Velocidad: FAST= 5Mhz or SLOW=312.5kHz 
  */
-void SD_SPI2_Init(unsigned char);
+void SPI2_Init(unsigned char);
 
 /**
  * @param  Dato a enviar

@@ -14,8 +14,6 @@
 /*----------------------------------------------------------------------------
  VARIABLE GLOBALES
  -----------------------------------------------------------------------------*/
-struct sdflags sdflags;
-unsigned char ccs;
 unsigned char adxlBuffer[243];
 unsigned char bufferE[512];
 unsigned char bufferR[512];

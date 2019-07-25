@@ -13,7 +13,7 @@ void SPI2_Exchange(uint8_t *pTransmitData, uint8_t *pReceiveData);
  FUNCTIONS
  -----------------------------------------------------------------------------*/
 
-void SD_SPI2_Init(unsigned char speed) {
+void SPI2_Init(unsigned char speed) {
     SPI2STATbits.SPIEN = 0;
     if (speed == FAST) {
         /*40MHz /(4*2) = 5MHz*/
@@ -41,6 +41,14 @@ void SPI2_Exchange(uint8_t *pTransmitData, uint8_t *pReceiveData) {
 }
 
 uint8_t SPI2_Exchange_Byte(uint8_t data) {
+    uint8_t receiveData;
+
+    SPI2_Exchange(&data, &receiveData);
+
+    return (receiveData);
+}
+
+unsigned char SPI2_Write(unsigned char data) {
     uint8_t receiveData;
 
     SPI2_Exchange(&data, &receiveData);

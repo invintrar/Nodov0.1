@@ -10,9 +10,9 @@
       <itemPath>main.h</itemPath>
       <itemPath>osc.h</itemPath>
       <itemPath>pines_conf.h</itemPath>
-      <itemPath>sdcard.h</itemPath>
       <itemPath>spi1.h</itemPath>
       <itemPath>system.h</itemPath>
+      <itemPath>sdcard.h</itemPath>
       <itemPath>spi2.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -28,9 +28,9 @@
       <itemPath>main.c</itemPath>
       <itemPath>osc.c</itemPath>
       <itemPath>pines_conf.c</itemPath>
-      <itemPath>sdcard.c</itemPath>
       <itemPath>spi1.c</itemPath>
       <itemPath>system.c</itemPath>
+      <itemPath>sdcard.c</itemPath>
       <itemPath>spi2.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"

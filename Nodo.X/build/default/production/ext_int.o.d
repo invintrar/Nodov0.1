@@ -8,4 +8,5 @@ system.h  \
 pines_conf.h  \
 osc.h  \
 sdcard.h  \
+spi2.h  \
 interrupt_manager.h 

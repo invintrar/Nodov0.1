@@ -7,5 +7,6 @@ main.h  \
 pines_conf.h  \
 osc.h  \
 sdcard.h  \
+spi2.h  \
 interrupt_manager.h  \
-ext_int.h 
+ ext_int.h 

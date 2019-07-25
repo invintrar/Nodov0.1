@@ -1,40 +1,29 @@
 #ifndef SD_H
 #define SD_H
-
-#include "main.h"
-#include "spi2.h"
-
 /*****************************************************************************/
 /* Structures definition*/
 
 /*****************************************************************************/
-typedef struct{
-    unsigned init_ok : 1;
-    unsigned detected : 1;
-    unsigned saving : 1;
-}sdFlags;
+struct sdflags {
+    unsigned char init_ok : 1;
+    unsigned char detected : 1;
+    unsigned char saving : 1;
+};
 
-/*----------------------------------------------------------------------------
- Variables Externas
- -----------------------------------------------------------------------------*/
-extern unsigned char ccs;
-extern sdFlags sdF;
-
-/*---------------------------------------------------------------------------
- SD Card Chip Select I/O definition
- ----------------------------------------------------------------------------*/
-#define SD_CS_Lat  LATB
-#define SD_CS_Tris TRISB
-#define SD_CS_Port PORTB
-#define SD_CS_Bit  6
+/*****************************************************************************/
+/* SD Card Chip Select I/O definition */
+/*****************************************************************************/
+#define spi_lat_CS  LATB
+#define spi_tris_CS TRISB
+#define spi_port_CS PORTB
+#define spi_bit_CS  0
 // Indicator led port definitions
-#define SD_Led_Tris TRISA
-#define SD_Led_Lat  LATA
-#define SD_Led_Bit  1
-
-/*---------------------------------------------------------------------------
- SD Card Commands
- ----------------------------------------------------------------------------*/
+#define led_sd_tris TRISA
+#define led_sd_lat  LATA
+#define led_sd_bit  1
+/*****************************************************************************/
+/* SD Card Commands*/
+/*****************************************************************************/
 #define GO_IDLE_STATE       0x00        // CMD0
 #define SEND_OP_COND        0x01        // CMD1
 #define SEND_IF_COND        0x08        // CMD8
@@ -52,9 +41,9 @@ extern sdFlags sdF;
 #define SET_CLR_CARD_DETECT 0x2A        // ACMD42
 #define SEND_SCR            0x33        // ACMD51
 
-/*----------------------------------------------------------------------------
- SD Card Command Responses
- -----------------------------------------------------------------------------*/
+/*****************************************************************************/
+/* SD Card Command Responses */
+/*****************************************************************************/
 // R1 response (8bits)
 #define IDLE_STATE              0
 #define ERASE_RESET             1
@@ -96,11 +85,9 @@ extern sdFlags sdF;
 #define SD_TIME_OUT             2000
 
 #define DETECTED                0xDE
-
-/*----------------------------------------------------------------------------
-    SD Card Function Prototype
- -----------------------------------------------------------------------------*/
-
+/*****************************************************************************/
+/* SD Card Function Prototyping */
+/*****************************************************************************/
 unsigned char SD_Init(void);
 unsigned char SD_Init_Try(unsigned char);
 unsigned char SD_Write_Block(unsigned char*, unsigned long);

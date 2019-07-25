@@ -7,5 +7,6 @@ osc.h  \
 spi1.h  \
 main.h  \
 sdcard.h  \
+spi2.h  \
 interrupt_manager.h  \
 ext_int.h 

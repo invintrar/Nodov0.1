@@ -1,40 +1,119 @@
+#include "main.h"
+#include "spi1.h"
 #include "sdcard.h"
 
-unsigned char ccs;
-sdFlags sdF;
+extern unsigned char ccs;
+extern struct sdflags sdflags;
 /*****************************************************************************/
 /* SD Card Functions */
 
 /*****************************************************************************/
 
+unsigned char SD_Read(unsigned char *Buffer, unsigned int nbytes) {
+    unsigned int i;
+    unsigned char temp;
+    for (i = 0; i < SD_TIME_OUT; i++) {
+        temp = SPI1_Write(0xFF);
+        if (temp == 0xFE)
+            break;
+        if (i == SD_TIME_OUT - 1)
+            return TOKEN_NOT_RECEIVED;
+    }
+    for (i = 0; i < nbytes; i++) {
+        Buffer[i] = SPI1_Write(0xFF);
+    }
+    temp = SPI1_Write(0xFF); // Read 16bits of CRC
+    temp = SPI1_Write(0xFF); //
+    return 0x00; // Successful read
+}
+
+unsigned char SD_Read_Block(unsigned char *Buffer, unsigned long Address) {
+    unsigned char temp;
+    Select_SD();
+
+    if (ccs == 0x02) Address <<= 9; // Address * 512 for SDSC cards
+    if (SD_Ready() == 0) return SD_NOT_READY;
+    SD_Send_Command(READ_SINGLE_BLOCK, Address, 0xFF);
+    temp = R1_Response();
+    if (temp != 0x00) return temp;
+    temp = SD_Read(Buffer, 512);
+
+    Release_SD();
+    return temp;
+}
+
+unsigned char SD_Write_Block(unsigned char *Buffer, unsigned long Address) {
+    unsigned char temp;
+    unsigned int i;
+
+    Select_SD();
+
+    if (ccs == 0x02)
+        Address <<= 9; // Address * 512 for SDSC cards
+    if (SD_Ready() == 0)
+        return SD_NOT_READY;
+    SD_Send_Command(WRITE_BLOCK, Address, 0xFF);
+    temp = R1_Response();
+    if (temp != 0x00)
+        return temp;
+    temp = SPI1_Write(0xFE); // Send Start Block Token;
+    for (i = 0; i < 512; i++) {
+        temp = SPI1_Write(Buffer[i]);
+    }
+    temp = SPI1_Write(0xFF); // Send dummy 16bits CRC
+    temp = SPI1_Write(0xFF);
+    temp = SPI1_Write(0xFF); // Read Response token (xxx0:status(3b):1)
+    temp = (temp & 0x0E) >> 1;
+    if (SD_Ready() == 0)
+        return SD_NOT_READY;
+    Release_SD();
+    if (temp == 0x02)
+        return DATA_ACCEPTED;
+    else if (temp == 0x05)
+        return DATA_REJECTED_CRC_ERROR;
+    else if (temp == 0x06)
+        return DATA_REJECTED_WR_ERROR;
+    else
+        return ERROR;
+}
+
+unsigned char SD_Init_Try(unsigned char try_value) {
+    unsigned char i, init_status;
+    if (try_value == 0) try_value = 1;
+    for (i = 0; i < try_value; i++) {
+        init_status = SD_Init();
+        if (init_status == SUCCESSFUL_INIT) break;
+        Release_SD();
+        __delay_ms(10);
+    }
+    return init_status;
+}
+
 unsigned char SD_Init(void) {
     // Local variables required
     unsigned int i;
-    unsigned char temp = 0;
+    unsigned char temp;
     unsigned long temp_long;
 
     // Start with CS = 1
     Release_SD();
 
     // Initialize SPI interface at slow speed
-    SD_SPI2_Init(SLOW);
+    SD_SPI1_Init(SLOW);
 
     // Toggle CLK for 80 cycles with SDO high
     for (i = 0; i < 80; i++)
-        SPI2_Exchange_Byte(0xFF);
+        SPI1_Write(0xFF);
 
     // Reset SD Card
     Select_SD();
-
     for (i = 0; i < SD_TIME_OUT; i++) {
         SD_Send_Command(GO_IDLE_STATE, 0x00000000, 0x4A); // CMD0
         temp = R1_Response();
-        if (temp == (1 << IDLE_STATE)) {
+        if (temp == (1 << IDLE_STATE))
             break;
-        }
-        if (i == (SD_TIME_OUT - 1)) {
+        if (i == (SD_TIME_OUT - 1))
             return CARD_NOT_INSERTED;
-        }
     }
 
     // Send CMD8 Command (2.7-3.6V range = 0x01. Check pattern = 0xAA)
@@ -101,9 +180,9 @@ unsigned char SD_Init(void) {
         return temp; // Some error of the R1 response type
 
     // Disable CRC verification. CRC7 is ignored in subsequent commands.
-    if (SD_Ready() == 0)
+    if (SD_Ready() == 0) {
         return SD_NOT_READY;
-
+    }
     SD_Send_Command(CRC_ON_OFF, 0x00000000, 0x48); // CMD59
     temp = R1_Response();
     if (temp != 0x00)
@@ -129,106 +208,24 @@ unsigned char SD_Init(void) {
 
     // Configure SPI to maximum speed
     Release_SD();
-    SD_SPI2_Init(FAST);
+    SD_SPI1_Init(FAST);
 
     return SUCCESSFUL_INIT;
-
-}
-
-unsigned char SD_Init_Try(unsigned char try_value) {
-    unsigned char i, init_status;
-    if (try_value == 0) try_value = 1;
-    for (i = 0; i < try_value; i++) {
-        init_status = SD_Init();
-        if (init_status == SUCCESSFUL_INIT) break;
-        Release_SD();
-
-        __delay_ms(10);
-    }
-    return init_status;
-}
-
-unsigned char SD_Read(unsigned char *Buffer, unsigned int nbytes) {
-    unsigned int i;
-    unsigned char temp;
-    for (i = 0; i < SD_TIME_OUT; i++) {
-        temp = SPI2_Exchange_Byte(0xFF);
-        if (temp == 0xFE)
-            break;
-        if (i == SD_TIME_OUT - 1)
-            return TOKEN_NOT_RECEIVED;
-    }
-    for (i = 0; i < nbytes; i++) {
-        Buffer[i] = SPI2_Exchange_Byte(0xFF);
-    }
-    temp = SPI2_Exchange_Byte(0xFF); // Read 16bits of CRC
-    temp = SPI2_Exchange_Byte(0xFF); //
-    return 0x00; // Successful read
-}
-
-unsigned char SD_Read_Block(unsigned char *Buffer, unsigned long Address) {
-    unsigned char temp;
-    Select_SD();
-
-    if (ccs == 0x02) Address <<= 9; // Address * 512 for SDSC cards
-    if (SD_Ready() == 0) return SD_NOT_READY;
-    SD_Send_Command(READ_SINGLE_BLOCK, Address, 0xFF);
-    temp = R1_Response();
-    if (temp != 0x00) return temp;
-    temp = SD_Read(Buffer, 512);
-
-    Release_SD();
-    return temp;
-}
-
-unsigned char SD_Write_Block(unsigned char *Buffer, unsigned long Address) {
-    unsigned char temp;
-    unsigned int i;
-
-    Select_SD();
-
-    if (ccs == 0x02)
-        Address <<= 9; // Address * 512 for SDSC cards
-    if (SD_Ready() == 0)
-        return SD_NOT_READY;
-    SD_Send_Command(WRITE_BLOCK, Address, 0xFF);
-    temp = R1_Response();
-    if (temp != 0x00)
-        return temp;
-    temp = SPI2_Exchange_Byte(0xFE); // Send Start Block Token;
-    for (i = 0; i < 512; i++) {
-        temp = SPI2_Exchange_Byte(Buffer[i]);
-    }
-    temp = SPI2_Exchange_Byte(0xFF); // Send dummy 16bits CRC
-    temp = SPI2_Exchange_Byte(0xFF);
-    temp = SPI2_Exchange_Byte(0xFF); // Read Response token (xxx0:status(3b):1)
-    temp = (temp & 0x0E) >> 1;
-    if (SD_Ready() == 0)
-        return SD_NOT_READY;
-    Release_SD();
-    if (temp == 0x02)
-        return DATA_ACCEPTED;
-    else if (temp == 0x05)
-        return DATA_REJECTED_CRC_ERROR;
-    else if (temp == 0x06)
-        return DATA_REJECTED_WR_ERROR;
-    else
-        return ERROR;
 }
 
 unsigned char R1_Response(void) {
     unsigned char temp;
-    temp = SPI2_Exchange_Byte(0xFF);
-    temp = SPI2_Exchange_Byte(0xFF);
+    temp = SPI1_Write(0xFF);
+    temp = SPI1_Write(0xFF);
     return temp;
 }
 
 unsigned int R2_Response(void) {
     unsigned char temp;
     unsigned int response;
-    temp = SPI2_Exchange_Byte(0xFF);
-    response = SPI2_Exchange_Byte(0xFF);
-    temp = SPI2_Exchange_Byte(0xFF);
+    temp = SPI1_Write(0xFF);
+    response = SPI1_Write(0xFF);
+    temp = SPI1_Write(0xFF);
     response = (response << 8) | temp;
     return response;
 }
@@ -236,30 +233,30 @@ unsigned int R2_Response(void) {
 unsigned long Response_32b(void) {
     unsigned char temp;
     unsigned long response;
-    response = SPI2_Exchange_Byte(0xFF);
-    temp = SPI2_Exchange_Byte(0xFF);
+    response = SPI1_Write(0xFF);
+    temp = SPI1_Write(0xFF);
     response = (response << 8) | temp;
-    temp = SPI2_Exchange_Byte(0xFF);
+    temp = SPI1_Write(0xFF);
     response = (response << 8) | temp;
-    temp = SPI2_Exchange_Byte(0xFF);
+    temp = SPI1_Write(0xFF);
     response = (response << 8) | temp;
     return response;
 }
 
 void SD_Send_Command(unsigned char command, unsigned long argument, unsigned char crc) {
-    SPI2_Exchange_Byte(command |= 0x40);
-    SPI2_Exchange_Byte((unsigned char) (argument >> 24));
-    SPI2_Exchange_Byte((unsigned char) (argument >> 16));
-    SPI2_Exchange_Byte((unsigned char) (argument >> 8));
-    SPI2_Exchange_Byte((unsigned char) (argument));
-    SPI2_Exchange_Byte((crc << 1) | 0x01);
+    SPI1_Write(command |= 0x40);
+    SPI1_Write((unsigned char) (argument >> 24));
+    SPI1_Write((unsigned char) (argument >> 16));
+    SPI1_Write((unsigned char) (argument >> 8));
+    SPI1_Write((unsigned char) (argument));
+    SPI1_Write((crc << 1) | 0x01);
 }
 
 unsigned char SD_Ready(void) {
     unsigned int i;
     unsigned char temp;
     for (i = 0; i < SD_TIME_OUT; i++) {
-        temp = SPI2_Exchange_Byte(0xFF);
+        temp = SPI1_Write(0xFF);
         if (temp == 0xFF)
             break;
         if (i == (SD_TIME_OUT - 1))
@@ -267,18 +264,34 @@ unsigned char SD_Ready(void) {
     }
     return temp;
 }
-// Check if SD card is inserted
 
-void SD_Check(void) {
-    if (SD_Detect() != DETECTED) {
-        sdF.detected = 0;
-        sdF.init_ok = 0;
-        sdF.saving = 0;
-        SD_Led_Off();
-    } else {
-        SD_Led_On();
-        sdF.detected = 1;
-    }
+unsigned char Detect_SD(void) {
+    Release_SD(); // CS pin as input
+    __delay_us(100);
+    if ((spi_port_CS & (1 << spi_bit_CS)) == (1 << spi_bit_CS))
+        return 1;
+    else
+        return 0;
+}
+
+void Select_SD(void) {
+    spi_tris_CS &= ~(1 << spi_bit_CS);
+    spi_lat_CS &= ~(1 << spi_bit_CS); // CS = 0
+    __builtin_nop();
+}
+
+void Release_SD(void) {
+    // Configure Chip Select pin as input    // CS = 1 with SD pull-up
+    spi_tris_CS |= (1 << spi_bit_CS);
+    __builtin_nop();
+}
+
+void SD_Led_On(void) {
+    led_sd_lat |= (1 << led_sd_bit);
+}
+
+void SD_Led_Off(void) {
+    led_sd_lat &= ~(1 << led_sd_bit);
 }
 
 unsigned char SD_Detect(void) {
@@ -286,28 +299,21 @@ unsigned char SD_Detect(void) {
     __delay_us(100); // time to discharge parasitic capacitance;
     Release_SD(); // CS pin in high-impedance
     __delay_us(100); // time to charge parasitic capacitance through 50k SD res
-    if (SD_CS_Port & (1 << SD_CS_Bit))
+    if (spi_port_CS & (1 << spi_bit_CS))
         return DETECTED;
     else
         return 0;
 }
 
-void Select_SD(void) {
-    SD_CS_Tris &= ~(1 << SD_CS_Bit);
-    SD_CS_Lat &= ~(1 << SD_CS_Bit); // CS = 0
-    __builtin_nop();
-}
+// Check if SD card is inserted
 
-void Release_SD(void) {
-    // Configure Chip Select pin as input    // CS = 1 with SD pull-up
-    SD_CS_Tris |= (1 << SD_CS_Bit);
-    __builtin_nop();
-}
-
-void SD_Led_On(void) {
-    SD_Led_Lat |= (1 << SD_Led_Bit);
-}
-
-void SD_Led_Off(void) {
-    SD_Led_Lat &= ~(1 << SD_Led_Bit);
+void SD_Check(void) {
+    if (SD_Detect() != DETECTED) {
+        sdflags.detected = 0;
+        sdflags.init_ok = 0;
+        sdflags.saving = 0;
+        SD_Led_Off();
+    } else {
+        sdflags.detected = 1;
+    }
 }
