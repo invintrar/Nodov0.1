@@ -25,10 +25,9 @@ void __attribute__((interrupt, no_auto_psv)) _INT0Interrupt(void) {
 
 void __attribute__((weak)) EX_INT1_CallBack(void) {
     // Add your custom callback code here
-    banderInt = 1;
-    banderCont = 0;
-    LATAbits.LATA1 ^= 1;
-    ADXL355_Read_CFIFO();  
+    banderInt1 = 0;
+    banderCont++;
+    ADXL355_Read_FIFO_Full();  
 
 }
 

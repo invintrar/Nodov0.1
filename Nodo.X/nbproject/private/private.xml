@@ -5,7 +5,13 @@
         <group>
             <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/main.c</file>
             <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/main.h</file>
-            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/pines_conf.c</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/system.h</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/system.c</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/sdcard.c</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/ext_int.c</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/adxl355.c</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/adxl355.h</file>
+            <file>file:/C:/Users/Darwin/Documents/GitHub/Nodo/Nodo.X/ext_int.h</file>
         </group>
     </open-files>
 </project-private>

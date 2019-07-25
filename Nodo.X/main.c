@@ -14,11 +14,11 @@
 /*----------------------------------------------------------------------------
  VARIABLE GLOBALES
  -----------------------------------------------------------------------------*/
-unsigned char adxlBuffer[243];
 unsigned char bufferE[512];
 unsigned char bufferR[512];
-unsigned char banderInt;
+unsigned char banderInt1;
 unsigned int banderCont;
+unsigned long sector;
 
 /*----------------------------------------------------------------------------
  FUNCTION PROTOTYPES
@@ -29,9 +29,10 @@ unsigned int banderCont;
  =============================================================================*/
 int main(void) {
     /* Variables Locales*/
-    char valorX = 0;
-    banderInt = 0;
+    unsigned int i, j;
+    banderInt1 = 1;
     banderCont = 0;
+    sector = 0x0803;
 
     SYSTEM_Initialize();
 
@@ -41,16 +42,24 @@ int main(void) {
 
     while (1) {
         LATAbits.LATA0 ^= 1;
+        //SD_Check();
+        /*
+        if ( banderInt1) {
+            for (j = 0; j < 63; j++) {
+                bufferE[i] = dataCBuffer[j];
+                if (i < 512) {
+                    i++;
+                } else {
+                    SD_Write_Block(bufferE, sector);
+                    i = 0;
+                    sector++;
+                }
 
-        if (banderInt) {
-
-            valorX = dataCBuffer[0];  
-            valorX = dataCBuffer[1];                                    
-            valorX = dataCBuffer[2];                      
-
-            banderInt = 0;
-        }       
-        
+            }
+            banderInt1 = 1;
+        }
+         */
+         
         __delay_ms(250);
     }
 

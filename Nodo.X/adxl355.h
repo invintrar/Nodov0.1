@@ -151,6 +151,6 @@ unsigned char ADXL355_Read_Byte(unsigned char);
 
 void ADXL355_Read_FIFO();
 
-void ADXL355_Read_CFIFO();
+void ADXL355_Read_FIFO_Full();
 
 #endif
