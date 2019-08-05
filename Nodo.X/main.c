@@ -29,13 +29,19 @@ unsigned long sector;
  =============================================================================*/
 int main(void) {
     /* Variables Locales*/
-    unsigned int i, j;
+    unsigned int i = 0, j;
     banderInt1 = 1;
     banderCont = 0;
-    sector = 0x0803;
+    sdF.detected = 0;
+    sdF.init_ok = 0;
+    sdF.saving = 0;
+    sector = 2051;
 
     SYSTEM_Initialize();
 
+    for (j = 0; j < 512; j++) {
+        bufferE[j] = 0;
+    }
     /*Encendemos el ADXL255*/
     ADXL355_Write_Byte(POWER_CTL, MEASURING);
     __delay_ms(250);
@@ -43,23 +49,23 @@ int main(void) {
     while (1) {
         LATAbits.LATA0 ^= 1;
         //SD_Check();
-        /*
-        if ( banderInt1) {
+
+        if (banderInt1 == 0) {
             for (j = 0; j < 63; j++) {
                 bufferE[i] = dataCBuffer[j];
                 if (i < 512) {
                     i++;
                 } else {
+                    if (sector > 975871)
+                        break;
                     SD_Write_Block(bufferE, sector);
                     i = 0;
                     sector++;
                 }
-
             }
             banderInt1 = 1;
         }
-         */
-         
+
         __delay_ms(250);
     }
 
