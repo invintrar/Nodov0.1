@@ -16,6 +16,7 @@ void SYSTEM_Initialize(void)
     
     INTERRUPT_GlobalEnable();
     ADXL355_Init();
+    RF24L01_init();
 }
 
 /**

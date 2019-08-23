@@ -13,7 +13,7 @@ void SPI1_Exchange(uint8_t *pTransmitData, uint8_t *pReceiveData);
  FUNCTIONS
  -----------------------------------------------------------------------------*/
 
-void ADXL355_SPI1_Init() {
+void SPI1_Init() {
     SPI1STATbits.SPIEN = 0;
     /* 
      * FCY = 40 Mhz
@@ -29,6 +29,7 @@ void ADXL355_SPI1_Init() {
     // SISEL SPI_INT_SPIRBF; SPIROV disabled; SPIEN enabled; SPISIDL disabled.
     SPI1STAT = 0x8000;
 }
+
 
 void SD_SPI1_Init(unsigned char speed) {
     SPI1STATbits.SPIEN = 0;

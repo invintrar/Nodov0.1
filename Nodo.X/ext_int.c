@@ -46,7 +46,18 @@ void __attribute__((interrupt, no_auto_psv)) _INT1Interrupt(void) {
 
 void __attribute__((weak)) EX_INT2_CallBack(void) {
     // Add your custom callback code here
-    banderCont++;
+    uint8_t sent_info;
+    if((sent_info = RF24L01_was_data_sent())){
+        //Packet wat sent or max retries reached
+        mutex = sent_info;
+        RF24L01_clear_interrupts();
+    }
+    
+    if(RF24L01_is_data_available()){
+        //Packet was received
+        mutex = 1;
+        RF24L01_clear_interrupts();
+    }
 
 }
 

@@ -9,4 +9,5 @@ pines_conf.h  \
 osc.h  \
 sdcard.h  \
 spi2.h  \
-interrupt_manager.h 
+interrupt_manager.h  \
+ rf24l01.h 

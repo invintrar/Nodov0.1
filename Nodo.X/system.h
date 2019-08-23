@@ -7,6 +7,7 @@
 #include "sdcard.h"
 #include "interrupt_manager.h"
 #include "ext_int.h"
+#include "rf24l01.h"
 
 /*----------------------------------------------------------------------------
  FUNCTION PROTOTYPE

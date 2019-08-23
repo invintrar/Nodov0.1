@@ -13,7 +13,8 @@ char dataCBuffer[];
  -----------------------------------------------------------------------------*/
 
 void ADXL355_Init() {
-    ADXL355_SPI1_Init();
+    SPI1_Init();
+    banderaSPI1 = 1;
     __delay_ms(10);
     ADXL355_Write_Byte(Reset, 0x52); //Resetea el dispositivo
     __delay_ms(10);
