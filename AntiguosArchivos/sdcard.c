@@ -5,7 +5,7 @@
 extern unsigned char ccs;
 extern struct sdflags sdflags;
 /*****************************************************************************/
-/* SD Card Functions */
+/* SD Card Functions  Esto es una prueba*/
 
 /*****************************************************************************/
 
