@@ -48,21 +48,21 @@ void __attribute__((weak)) EX_INT2_CallBack(void) {
     uint8_t sent_info = 0;
 
     LATAbits.LATA0 ^= 1;
-
+    /*Check data was sent*/
     if (sent_info = RF24L01_was_data_sent()) {
-        //Packet wat sent or max retries reached
+        //Packet was sent or max retries reached
         mutex = sent_info;
         RF24L01_clear_interrupts();
         return;
     }
-
+    /*Check data is available*/
     if (RF24L01_is_data_available()) {
         //Packet was received
         mutex = 1;
         RF24L01_clear_interrupts();
         return;
     }
-
+    
     RF24L01_clear_interrupts();
 }
 
