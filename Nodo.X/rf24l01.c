@@ -61,21 +61,30 @@ void RF24L01_write_register(uint8_t register_addr, uint8_t *value, uint8_t lengt
     RF24L01_CS_SetHigh();
 }
 
+/*SETUP*/
 void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
     //CE -> Low
     RF24L01_CE_SetLow(); 
 
+    /*Setup of Addres Widths*/
     RF24L01_reg_SETUP_AW_content SETUP_AW;
     *((uint8_t *) & SETUP_AW) = 0;
-    SETUP_AW.AW = 0x03;
+    SETUP_AW.AW = 0x03;//RX/TX Addres field width('11' -> 5 bytes)
     RF24L01_write_register(RF24L01_reg_SETUP_AW, ((uint8_t *) & SETUP_AW), 1);
 
     RF24L01_write_register(RF24L01_reg_RX_ADDR_P0, rx_addr, 5);
+    
     RF24L01_write_register(RF24L01_reg_TX_ADDR, tx_addr, 5);
 
     RF24L01_reg_EN_AA_content EN_AA;
     *((uint8_t *) & EN_AA) = 0;
     RF24L01_write_register(RF24L01_reg_EN_AA, ((uint8_t *) & EN_AA), 1);
+    
+    RF24L01_reg_SETUP_RETR_content SETUP_RETR;
+    *((uint8_t *) & SETUP_RETR) = 0;
+    SETUP_RETR.ARC = 0X03;
+    SETUP_RETR.ARD = 0X01;
+    RF24L01_write_register(RF24L01_reg_SETUP_RETR,((uint8_t *) & SETUP_RETR), 1);
 
     RF24L01_reg_EN_RXADDR_content RX_ADDR;
     *((uint8_t *) & RX_ADDR) = 0;
@@ -94,19 +103,19 @@ void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
 
     RF24L01_reg_RF_SETUP_content RF_SETUP;
     *((uint8_t *) & RF_SETUP) = 0;
-    RF_SETUP.RF_PWR = 0x03;//Potencia de salida 0dBm
+    RF_SETUP.RF_PWR = 0x02;//Potencia de salida -6dBm
     RF_SETUP.RF_DR = 0x01;//Air Data Rate 2Mbps
     RF_SETUP.LNA_HCURR = 0x01;//LNA gain
     RF24L01_write_register(RF24L01_reg_RF_SETUP, ((uint8_t *) & RF_SETUP), 1);
 
     RF24L01_reg_CONFIG_content config;
     *((uint8_t *) & config) = 0;
-    config.PWR_UP = 0;//Power down 
-    config.PRIM_RX = 1;//PRX (RX/TX Control)
-    config.EN_CRC = 1;//Enable CRC
-    config.MASK_MAX_RT = 0;//Reflect MAX_RT as active low interrupt on the IRQ pin
-    config.MASK_TX_DS = 0;//Reflect TX_DS as active low interrupt on the IRQ pin
-    config.MASK_RX_DR = 0;//
+    config.PRIM_RX = 1;//PRX
+    config.PWR_UP  = 0;//Power down 
+    config.EN_CRC  = 1;//Enable CRC
+    config.MASK_MAX_RT = 0;//MAX_RT  active low interrupt on the IRQ
+    config.MASK_TX_DS  = 0;//TX_DS    active low interrupt on the IRQ
+    config.MASK_RX_DR  = 0;//RX_DR    active low interrupt on the IRQ
     RF24L01_write_register(RF24L01_reg_CONFIG, ((uint8_t *) & config), 1);
 }
 
@@ -124,6 +133,7 @@ void RF24L01_set_mode_TX(void) {
     config.MASK_TX_DS = 0;
     config.MASK_RX_DR = 0;
     RF24L01_write_register(RF24L01_reg_CONFIG, ((uint8_t *) & config), 1);
+    
 }
 
 void RF24L01_set_mode_RX(void) {
@@ -140,9 +150,9 @@ void RF24L01_set_mode_RX(void) {
     //Clear the status register to discard any data in the buffers
     RF24L01_reg_STATUS_content a;
     *((uint8_t *) & a) = 0;
-    a.RX_DR = 1;
+    a.RX_DR  = 1;
     a.MAX_RT = 1;
-    a.TX_DS = 1;
+    a.TX_DS  = 1;
     RF24L01_write_register(RF24L01_reg_STATUS, (uint8_t *) & a, 1);
     RF24L01_send_command(RF24L01_command_FLUSH_RX);
 
@@ -225,6 +235,7 @@ uint8_t RF24L01_was_data_sent(void) {
     a = RF24L01_get_status();
 
     uint8_t res = 0;
+    
     if (a.TX_DS) {
         res = 1;
     } else if (a.MAX_RT) {

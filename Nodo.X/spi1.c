@@ -28,6 +28,7 @@ void SPI1_Init() {
     SPI1CON2 = 0x00;
     // SISEL SPI_INT_SPIRBF; SPIROV disabled; SPIEN enabled; SPISIDL disabled.
     SPI1STAT = 0x8000;
+    banderaSPI1 = 1;
 }
 
 
