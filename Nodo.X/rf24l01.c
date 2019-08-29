@@ -61,7 +61,7 @@ void RF24L01_write_register(uint8_t register_addr, uint8_t *value, uint8_t lengt
     RF24L01_CS_SetHigh();
 }
 
-/*SETUP*/
+/** Function Setup*/
 void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
     //CE -> Low
     RF24L01_CE_SetLow(); 
@@ -75,37 +75,38 @@ void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
     RF24L01_write_register(RF24L01_reg_RX_ADDR_P0, rx_addr, 5);
     
     RF24L01_write_register(RF24L01_reg_TX_ADDR, tx_addr, 5);
-
+ 
     RF24L01_reg_EN_AA_content EN_AA;
     *((uint8_t *) & EN_AA) = 0;
+    EN_AA.ENAA_P0 = 1;//Enable auto acknowledgement data pipe 0
     RF24L01_write_register(RF24L01_reg_EN_AA, ((uint8_t *) & EN_AA), 1);
     
     RF24L01_reg_SETUP_RETR_content SETUP_RETR;
     *((uint8_t *) & SETUP_RETR) = 0;
-    SETUP_RETR.ARC = 0X03;
-    SETUP_RETR.ARD = 0X01;
+    SETUP_RETR.ARC = 0X03;//Up to 3 Re-Transmit on fail of AA
+    SETUP_RETR.ARD = 0X01;//Auto Retransmit Delay 
     RF24L01_write_register(RF24L01_reg_SETUP_RETR,((uint8_t *) & SETUP_RETR), 1);
 
     RF24L01_reg_EN_RXADDR_content RX_ADDR;
     *((uint8_t *) & RX_ADDR) = 0;
-    RX_ADDR.ERX_P0 = 1;
+    RX_ADDR.ERX_P0 = 1;//Enable data pipe 0
     RF24L01_write_register(RF24L01_reg_EN_RXADDR, ((uint8_t *) & RX_ADDR), 1);
 
     RF24L01_reg_RF_CH_content RF_CH;
     *((uint8_t *) & RF_CH) = 0;
-    RF_CH.RF_CH = channel;
+    RF_CH.RF_CH = channel;//Sets the frequency channel nRF24L01 operates on
     RF24L01_write_register(RF24L01_reg_RF_CH, ((uint8_t *) & RF_CH), 1);
 
     RF24L01_reg_RX_PW_P0_content RX_PW_P0;
     *((uint8_t *) & RX_PW_P0) = 0;
-    RX_PW_P0.RX_PW_P0 = 0x20;//Carga util a usar de 32bytes
+    RX_PW_P0.RX_PW_P0 = 0x20;//Number of bytes in RX payload in data pipe 0(32 bytes)
     RF24L01_write_register(RF24L01_reg_RX_PW_P0, ((uint8_t *) & RX_PW_P0), 1);
 
     RF24L01_reg_RF_SETUP_content RF_SETUP;
     *((uint8_t *) & RF_SETUP) = 0;
-    RF_SETUP.RF_PWR = 0x02;//Potencia de salida -6dBm
-    RF_SETUP.RF_DR = 0x01;//Air Data Rate 2Mbps
     RF_SETUP.LNA_HCURR = 0x01;//LNA gain
+    RF_SETUP.RF_PWR = 0x03;//Set RF output power in TX mode(0dBm)
+    RF_SETUP.RF_DR = 0x01;//Air Data Rate 2Mbps   
     RF24L01_write_register(RF24L01_reg_RF_SETUP, ((uint8_t *) & RF_SETUP), 1);
 
     RF24L01_reg_CONFIG_content config;
@@ -113,7 +114,7 @@ void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
     config.PRIM_RX = 1;//PRX
     config.PWR_UP  = 0;//Power down 
     config.EN_CRC  = 1;//Enable CRC
-    config.MASK_MAX_RT = 0;//MAX_RT  active low interrupt on the IRQ
+    config.MASK_MAX_RT = 0;//MAX_RT   active low interrupt on the IRQ
     config.MASK_TX_DS  = 0;//TX_DS    active low interrupt on the IRQ
     config.MASK_RX_DR  = 0;//RX_DR    active low interrupt on the IRQ
     RF24L01_write_register(RF24L01_reg_CONFIG, ((uint8_t *) & config), 1);
