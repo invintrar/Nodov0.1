@@ -105,6 +105,7 @@ int main(void) {
         to_send.add = received.op1 + received.op2;
         to_send.sub = received.op1 - received.op2;
         to_send.mult = received.op1 * received.op2;
+        
         if (received.op2 != 0) {
             to_send.div = received.op1 / received.op2;
         } else {
@@ -120,6 +121,7 @@ int main(void) {
         *((data_to_sent *) & buffer_to_send) = to_send;
         mutex = 0;
         RF24L01_set_mode_TX();
+        
         RF24L01_write_payload(buffer_to_send, 32);
 
         while (!mutex);
