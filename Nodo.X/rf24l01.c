@@ -15,6 +15,10 @@ void RF24L01_init(void) {
     }
 }
 
+/**
+ * Function Send Command
+ * @param command
+ */
 void RF24L01_send_command(uint8_t command) {
     //Chip select
     RF24L01_CS_SetLow();
@@ -26,6 +30,11 @@ void RF24L01_send_command(uint8_t command) {
     RF24L01_CS_SetHigh();
 }
 
+/**
+ * Function Read Register
+ * @param Register Address
+ * @return Data of Register
+ */
 uint8_t RF24L01_read_register(uint8_t register_addr) {
     uint8_t result;
     //Chip select -> Low
@@ -43,6 +52,12 @@ uint8_t RF24L01_read_register(uint8_t register_addr) {
     return result;
 }
 
+/**
+ * Function Write Register
+ * @param Register Address
+ * @param Data
+ * @param Length
+ */
 void RF24L01_write_register(uint8_t register_addr, uint8_t *value, uint8_t length) {
     uint8_t i;
 
@@ -61,7 +76,12 @@ void RF24L01_write_register(uint8_t register_addr, uint8_t *value, uint8_t lengt
     RF24L01_CS_SetHigh();
 }
 
-/** Function Setup*/
+/**
+ * Function Setup
+ * @param TX Address
+ * @param RX Address
+ * @param Channel
+ */
 void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
     //CE -> Low
     RF24L01_CE_SetLow();
@@ -128,9 +148,12 @@ void RF24L01_setup(uint8_t *tx_addr, uint8_t *rx_addr, uint8_t channel) {
     *((uint8_t *) & RX_PW_P0) = 0;
     RX_PW_P0.RX_PW_P0 = 0x20; //Number of bytes in RX payload in data pipe 0(32 bytes)
     RF24L01_write_register(RF24L01_reg_RX_PW_P0, ((uint8_t *) & RX_PW_P0), 1);
-
+    
 }
 
+/**
+ * Function Set Mode TX
+ */
 void RF24L01_set_mode_TX(void) {
     RF24L01_send_command(RF24L01_command_FLUSH_TX);
 
@@ -159,6 +182,9 @@ void RF24L01_set_mode_TX(void) {
     
 }
 
+/**
+ * Function Set Mode RX
+ */
 void RF24L01_set_mode_RX(void) {
     RF24L01_reg_CONFIG_content config;
     *((uint8_t *) & config) = 0;
@@ -185,6 +211,10 @@ void RF24L01_set_mode_RX(void) {
     RF24L01_CE_SetHigh();
 }
 
+/**
+ * Function Get Status
+ * @return Status
+ */
 RF24L01_reg_STATUS_content RF24L01_get_status(void) {
     uint8_t status;
 
@@ -201,6 +231,11 @@ RF24L01_reg_STATUS_content RF24L01_get_status(void) {
     return *((RF24L01_reg_STATUS_content *) & status);
 }
 
+/**
+ * Function Write Payload
+ * @param Data
+ * @param Length
+ */
 void RF24L01_write_payload(uint8_t *data, uint8_t length) {
     RF24L01_reg_STATUS_content a;
     uint8_t i;
@@ -237,6 +272,11 @@ void RF24L01_write_payload(uint8_t *data, uint8_t length) {
     RF24L01_CE_SetHigh();//CE -> High
 }
 
+/**
+ * Function Read Payload
+ * @param Data
+ * @param Length
+ */
 void RF24L01_read_payload(uint8_t *data, uint8_t length) {
     uint8_t i, status;
     //Chip select -> Low
@@ -258,6 +298,10 @@ void RF24L01_read_payload(uint8_t *data, uint8_t length) {
     RF24L01_send_command(RF24L01_command_FLUSH_RX);
 }
 
+/**
+ * Function Was Data Sent
+ * @return 1 Data Sent, 2 Max_RT
+ */
 uint8_t RF24L01_was_data_sent(void) {
     RF24L01_reg_STATUS_content a;
     a = RF24L01_get_status();
@@ -273,12 +317,19 @@ uint8_t RF24L01_was_data_sent(void) {
     return res;
 }
 
+/**
+ * Function Is Data Available
+ * @return 1 Data available other case return != 1
+ */
 uint8_t RF24L01_is_data_available(void) {
     RF24L01_reg_STATUS_content a;
     a = RF24L01_get_status();
     return a.RX_DR;
 }
 
+/**
+ * Function Clear Interrupts
+ */
 void RF24L01_clear_interrupts(void) {
     RF24L01_reg_STATUS_content a;
     a = RF24L01_get_status();

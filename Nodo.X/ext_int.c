@@ -47,9 +47,10 @@ void __attribute__((interrupt, no_auto_psv)) _INT1Interrupt(void) {
 void __attribute__((weak)) EX_INT2_CallBack(void) {
     uint8_t sent_info = 0;
 
-    LATAbits.LATA0 ^= 1;
+    LED_rojo_toggle();
+
     /*Check data was sent*/
-    if (sent_info = RF24L01_was_data_sent()) {
+    if ((sent_info = RF24L01_was_data_sent())) {
         //Packet was sent or max retries reached
         mutex = sent_info;
         RF24L01_clear_interrupts();
@@ -62,7 +63,7 @@ void __attribute__((weak)) EX_INT2_CallBack(void) {
         RF24L01_clear_interrupts();
         return;
     }
-    
+
     RF24L01_clear_interrupts();
 }
 

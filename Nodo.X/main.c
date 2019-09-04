@@ -48,7 +48,7 @@ int main(void) {
     unsigned char rx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
     unsigned char tx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
 
-    unsigned int i = 0, j;
+    unsigned int  j;
 
     banderInt1 = 1;
     banderCont = 0;
@@ -58,12 +58,8 @@ int main(void) {
     sdF.saving = 0;
     sector = 2051;
     mutex = 0;
-    
+
     SYSTEM_Initialize();
-    
-
-    LED_verde_setHigh();
-
 
     /* Incializamos la variable de la memoria a 0*/
     for (j = 0; j < 512; j++) {
@@ -76,17 +72,26 @@ int main(void) {
     /*Encendemos el ADXL255*/
     //ADXL355_Write_Byte(POWER_CTL, MEASURING);
     //__delay_ms(250);
+    
+    for (j = 0; j < 10; j++) {
+        LED_rojo_toggle();
+        __delay_ms(250);
+    }
+
+    LED_verde_setHigh();
 
     while (1) {
-        
+
         mutex = 0;
-        
+
+        /*Set Mode RX*/
         RF24L01_set_mode_RX();
-        /*Esperamo la interrupcion*/
+        
+        /*Wait interrupt*/
         while (!mutex);
         if (mutex == 1) {
             unsigned char recv_data[32];
-            RF24L01_read_payload(recv_data, 32);
+            RF24L01_read_payload(recv_data, sizeof(recv_data));
             received = *((data_received *) & recv_data);
 
             asm("nop"); //Place a breakpoint here to see memmory
@@ -100,12 +105,12 @@ int main(void) {
         }
         unsigned short delay = 0xFFF;
         while (delay--);
-         
+
         //Prepare the response
         to_send.add = received.op1 + received.op2;
         to_send.sub = received.op1 - received.op2;
         to_send.mult = received.op1 * received.op2;
-        
+
         if (received.op2 != 0) {
             to_send.div = received.op1 / received.op2;
         } else {
@@ -114,21 +119,26 @@ int main(void) {
 
         //Prepare the buffer to send from the data_to_send struct
         unsigned char buffer_to_send[32];
-        for (i = 0; i < 32; i++) {
-            buffer_to_send[i] = 0;
-        }
+
 
         *((data_to_sent *) & buffer_to_send) = to_send;
-        mutex = 0;
-        RF24L01_set_mode_TX();
         
-        RF24L01_write_payload(buffer_to_send, 32);
+        mutex = 0;
+
+        /*Set Mode TX*/
+        RF24L01_set_mode_TX();
+
+        /*Write Payload*/
+        RF24L01_write_payload(buffer_to_send, sizeof(buffer_to_send));
 
         while (!mutex);
         if (mutex != 1) {
             //The transmission failed
             LED_verde_setLow();
+        }else{
+            LED_rojo_toggle();
         }
+        __delay_ms(10);
         /*
                 if (banderInt1 == 0) {
                     for (j = 0; j < 63; j++) {
@@ -145,7 +155,7 @@ int main(void) {
                     }
                     banderInt1 = 1;
                 }*/
-        
+
     }
 
     return 0;
