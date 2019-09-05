@@ -309,9 +309,9 @@ uint8_t RF24L01_was_data_sent(void) {
     uint8_t res = 0;
 
     if (a.TX_DS) {
-        res = 1;
-    } else if (a.MAX_RT) {
         res = 2;
+    } else if (a.MAX_RT) {
+        res = 3;
     }
 
     return res;
