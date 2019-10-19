@@ -13,6 +13,7 @@
 /*----------------------------------------------------------------------------
  VARIABLE GLOBALES
  -----------------------------------------------------------------------------*/
+/*Edicion Jose*/
 unsigned char bufferE[512];
 unsigned char bufferR[512];
 unsigned char banderInt1;
@@ -78,7 +79,7 @@ int main(void) {
         __delay_ms(250);
     }
 
-    LED_verde_setHigh();
+    LED_verde_setLow();
 
     while (1) {
 
@@ -86,7 +87,7 @@ int main(void) {
 
         /*Set Mode RX*/
         RF24L01_set_mode_RX();
-        
+        LED_verde_setHigh();
         /*Wait interrupt*/
         while (!mutex);
         if (mutex == 1) {
@@ -96,16 +97,20 @@ int main(void) {
 
             asm("nop"); //Place a breakpoint here to see memmory
 
-        } else {
+        }
+        /* else {
             //Something happened
             to_send.add = 0;
             to_send.div = 0;
             to_send.mult = 0;
             to_send.sub = 0;
-        }
+        }*/
+        
         unsigned short delay = 0xFFF;
         while (delay--);
 
+        LED_verde_setLow();
+        /*
         //Prepare the response
         to_send.add = received.op1 + received.op2;
         to_send.sub = received.op1 - received.op2;
@@ -115,30 +120,39 @@ int main(void) {
             to_send.div = received.op1 / received.op2;
         } else {
             to_send.div = 1;
-        }
+        }*/
 
         //Prepare the buffer to send from the data_to_send struct
         unsigned char buffer_to_send[32];
+        for(j =0; j<32;j++){
+            buffer_to_send[j]=0x52;
+        }
 
-
+        /*
         *((data_to_sent *) & buffer_to_send) = to_send;
-        
+        */
         mutex = 0;
 
         /*Set Mode TX*/
         RF24L01_set_mode_TX();
+        LED_verde_setHigh();
 
         /*Write Payload*/
         RF24L01_write_payload(buffer_to_send, sizeof(buffer_to_send));
 
         while (!mutex);
-        if (mutex != 1) {
-            //The transmission failed
+        
+        if (mutex == 1) {
+            //TX Data Sent
             LED_verde_setLow();
-        }else{
-            LED_rojo_toggle();
         }
-        __delay_ms(10);
+        
+        if(mutex == 2){
+            //MX_RT
+            LED_verde_setHigh();
+        } 
+        
+        
         /*
                 if (banderInt1 == 0) {
                     for (j = 0; j < 63; j++) {
