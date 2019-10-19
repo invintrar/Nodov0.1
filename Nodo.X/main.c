@@ -1,6 +1,6 @@
 /*
  * File:   main.c
- * Author: Darwin
+ * Author: Darwin y Joshe
  *
  * Created on June 26, 2019, 12:15 AM
  */
