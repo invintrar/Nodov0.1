@@ -12,6 +12,11 @@
 #define RF24L01_CE_SetLow()     _LATB5 = 0
 #define RF24L01_CE_SetHigh()    _LATB5 = 1
 
+/* Definimos Chip Enable para el RF24L01*/
+#define RF24L01_CS_SetDigitalOutput()  _TRISB13 = 0
+#define RF24L01_CS_Toggle()     _LATB13 ^= 1 
+#define RF24L01_CS_SetLow()     _LATB13 = 0
+#define RF24L01_CS_SetHigh()    _LATB13 = 1
 
 #define RF24L01_reg_CONFIG      0x00
 #define RF24L01_reg_EN_AA       0x01

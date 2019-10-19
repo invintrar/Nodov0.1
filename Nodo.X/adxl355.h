@@ -10,6 +10,12 @@
  PROGRAM CONSTANTS
  -----------------------------------------------------------------------------*/
 #define ADXL355_H
+/*Definimos Chip Select para el ADXL355*/
+#define ADXL355_CS_SetDigitalOutput()  _TRISB1 = 0
+#define ADXL355_CS_Toggle()     _LATB1 ^= 1 
+#define ADXL355_CS_SetLow()     _LATB1 = 0
+#define ADXL355_CS_SetHigh()    _LATB1 = 1
+
 /*      Register names      */
 #define DEVID_AD            0x00
 #define DEVID_MST           0x01

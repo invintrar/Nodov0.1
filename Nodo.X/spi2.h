@@ -12,11 +12,6 @@
  PROGRAM CONSTANTS
  ----------------------------------------------------------------------------*/
 #define	SPI2_H
-#define SS1_SetDigitalOutput()  _TRISB0 = 0
-#define SD_SS2_Toggle()         _LATB0 ^= 1 
-#define SD_SS2_SetLow()         _LATB0 = 0
-#define SD_SS2_SetHigh()        _LATB0 = 1
-
 /*Elegir velocidad en la transmisión*/
 #define FAST 1//Frecuencia reloj 5Mhz
 #define SLOW 0//Frecuencia reloj 312.5kHz
