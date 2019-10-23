@@ -11,8 +11,13 @@
     <memory name="program">
       <units>bytes</units>
       <length>263394</length>
+<<<<<<< HEAD
       <used>5946</used>
       <free>257448</free>
+=======
+      <used>6213</used>
+      <free>257181</free>
+>>>>>>> parent of 06ce924... Agregue comentario
     </memory>
   </executable>
 </project>

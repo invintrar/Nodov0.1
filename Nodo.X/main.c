@@ -13,7 +13,6 @@
 /*----------------------------------------------------------------------------
  VARIABLE GLOBALES
  -----------------------------------------------------------------------------*/
-/*Edicion Jose*/
 unsigned char bufferE[512];
 unsigned char bufferR[512];
 unsigned char banderInt1;
