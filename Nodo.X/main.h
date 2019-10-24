@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 #define MAIN_H
 #define FCY 40000000
-#include <libpic30.h>
+#include <libpic30.h>//
 
 #define LED_verde_setHigh()     _LATA0 = 1
 #define LED_verde_setLow()      _LATA0 = 0

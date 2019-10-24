@@ -8,6 +8,7 @@
 #include "interrupt_manager.h"
 #include "ext_int.h"
 #include "rf24l01.h"
+#include "spi1.h"
 
 /*----------------------------------------------------------------------------
  FUNCTION PROTOTYPE

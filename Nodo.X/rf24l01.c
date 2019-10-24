@@ -8,11 +8,6 @@ void RF24L01_init(void) {
     //CHIP ENABLE PARA TRANSMISION Y RECEPCION
     RF24L01_CE_SetDigitalOutput();
     RF24L01_CE_SetLow();
-
-    //Iniciamos SPI
-    if (banderaSPI1 != 1) {
-        SPI1_Init();
-    }
 }
 
 /**

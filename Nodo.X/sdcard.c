@@ -276,7 +276,6 @@ void SD_Check(void) {
         sdF.saving = 0;
         SD_Led_Off();
     } else {
-        SD_Led_On();
         sdF.detected = 1;
     }
 }
@@ -286,6 +285,7 @@ unsigned char SD_Detect(void) {
     __delay_us(100); // time to discharge parasitic capacitance;
     Release_SD(); // CS pin in high-impedance
     __delay_us(100); // time to charge parasitic capacitance through 50k SD res
+
     if (SD_CS_Port & (1 << SD_CS_Bit))
         return DETECTED;
     else

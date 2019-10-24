@@ -17,31 +17,16 @@ void SPI1_Init() {
     SPI1STATbits.SPIEN = 0;
     /* 
      * FCY = 40 Mhz
-     * Fosc spi = 40Mhz/(4*2) =5Mhz
-     * MSTEN Master; DISSDO disabled; PPRE 4:1; SPRE 2:1; MODE16 disabled; 
+     * Fosc spi = 40Mhz/(1*16) =2.5Mhz
+     * MSTEN Master; DISSDO disabled; SPRE 1:1(0b111); PPRE 16:1(0b01); MODE16 disabled; 
      * SMP Middle; DISSCK disabled; CKP Idle:Low, Active:High; 
      * CKE Active to Idle;
      *  SSEN disabled.*/
-    SPI1CON1 = 0x13A;
+    SPI1CON1 = 0x13D;
     /* SPIFSD disabled; SPIBEN disabled; FRMPOL disabled; FRMDLY disabled;
      *  FRMEN disabled.*/
     SPI1CON2 = 0x00;
     // SISEL SPI_INT_SPIRBF; SPIROV disabled; SPIEN enabled; SPISIDL disabled.
-    SPI1STAT = 0x8000;
-    banderaSPI1 = 1;
-}
-
-
-void SD_SPI1_Init(unsigned char speed) {
-    SPI1STATbits.SPIEN = 0;
-    if (speed == FAST) {
-        /*40MHz /(4*2) = 5MHz*/
-        SPI1CON1 = 0x13A;
-    } else {
-        /*40MHz / (2*64) =0.3125Mhz = 312.5kHz*/
-        SPI1CON1 = 0x138;
-    }
-    SPI1CON2 = 0x0000;
     SPI1STAT = 0x8000;
 }
 
@@ -66,12 +51,4 @@ uint8_t SPI1_Exchange_Byte(uint8_t data) {
 
     return (receiveData);
 }
-
-unsigned char SPI1_Write(unsigned char data) {
-    uint8_t receiveData;
-
-    SPI1_Exchange(&data, &receiveData);
-
-    return (receiveData);
-}
-
+/*End SPI1*/

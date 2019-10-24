@@ -23,16 +23,13 @@ unsigned long sector;
 unsigned char mutex;
 
 typedef struct _data_to_send {
-    uint32_t add;
-    uint32_t sub;
-    uint32_t mult;
-    uint32_t div;
+    uint32_t resp;
 } data_to_sent;
 data_to_sent to_send;
 
 typedef struct _data_to_received {
-    uint32_t op1;
-    uint32_t op2;
+    uint32_t recv0;
+    uint32_t recv1;
 } data_received;
 data_received received;
 
@@ -44,11 +41,9 @@ data_received received;
  FUNCTION MAIN
  =============================================================================*/
 int main(void) {
-    /* Variables Locales*/
-    unsigned char rx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
-    unsigned char tx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
-
-    unsigned int  j;
+    /* Direction RX*/
+    //unsigned char rx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
+    //unsigned char tx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
 
     banderInt1 = 1;
     banderCont = 0;
@@ -62,83 +57,87 @@ int main(void) {
     SYSTEM_Initialize();
 
     /* Incializamos la variable de la memoria a 0*/
-    for (j = 0; j < 512; j++) {
-        bufferE[j] = 0;
-    }
+    //for (j = 0; j < 512; j++) {
+    //  bufferE[j] = 0;
+    //}
 
     //Configuramos  RF24L01
-    RF24L01_setup(tx_addr, rx_addr, 12);
+    //RF24L01_setup(tx_addr, rx_addr, 12);
 
     /*Encendemos el ADXL255*/
     //ADXL355_Write_Byte(POWER_CTL, MEASURING);
     //__delay_ms(250);
-    
-    for (j = 0; j < 10; j++) {
-        LED_rojo_toggle();
-        __delay_ms(250);
-    }
-
-    LED_verde_setHigh();
 
     while (1) {
-
         mutex = 0;
 
-        /*Set Mode RX*/
-        RF24L01_set_mode_RX();
+        LED_rojo_toggle();
+
+        /*Comprobamos que la microSD siga conectadoa*/
+        SD_Check();
+        if (sdF.detected) {
+            /* Compromabos si esta inicializamos*/
+            if (!sdF.init_ok) {
+                /* Inicializamos microSD*/
+                if (SD_Init() == SUCCESSFUL_INIT) {
+                    sdF.init_ok = 1;
+                    SD_Led_On();
+                }
+            }
+        } else {
+            SD_Led_Off();
+        }
+
+        __delay_ms(250);
         
+        /*Set Mode RX*/
+        //RF24L01_set_mode_RX();
+
         /*Wait interrupt*/
-        while (!mutex);
-        if (mutex == 1) {
-            unsigned char recv_data[32];
-            RF24L01_read_payload(recv_data, sizeof(recv_data));
-            received = *((data_received *) & recv_data);
+        //while (!mutex);
+        //if (mutex == 1) {
+        //  unsigned char recv_data[32];
+        //RF24L01_read_payload(recv_data, sizeof (recv_data));
+        //received = *((data_received *) & recv_data);
 
-            asm("nop"); //Place a breakpoint here to see memmory
+        //asm("nop"); //Place a breakpoint here to see memmory
 
-        } else {
-            //Something happened
-            to_send.add = 0;
-            to_send.div = 0;
-            to_send.mult = 0;
-            to_send.sub = 0;
-        }
-        unsigned short delay = 0xFFF;
-        while (delay--);
+        //} else {
+        //Something happened
+        //  to_send.resp = 0;
+        //}
+        //unsigned short delay = 0xFFF;
+        //while (delay--);
 
-        //Prepare the response
-        to_send.add = received.op1 + received.op2;
-        to_send.sub = received.op1 - received.op2;
-        to_send.mult = received.op1 * received.op2;
-
-        if (received.op2 != 0) {
-            to_send.div = received.op1 / received.op2;
-        } else {
-            to_send.div = 1;
-        }
+        /*
+         * PREPARE THE RESPONSE
+         */
 
         //Prepare the buffer to send from the data_to_send struct
-        unsigned char buffer_to_send[32];
+        //unsigned char buffer_to_send[32];
+        //for (i = 0; i < 32; i++) {
+        //  buffer_to_send[i] = 0xAA;
+        //}
 
 
-        *((data_to_sent *) & buffer_to_send) = to_send;
-        
-        mutex = 0;
+        //*((data_to_sent *) & buffer_to_send) = to_send;
+
+        //mutex = 0;
 
         /*Set Mode TX*/
-        RF24L01_set_mode_TX();
+        //RF24L01_set_mode_TX();
 
         /*Write Payload*/
-        RF24L01_write_payload(buffer_to_send, sizeof(buffer_to_send));
+        //RF24L01_write_payload(buffer_to_send, sizeof (buffer_to_send));
 
-        while (!mutex);
-        if (mutex != 1) {
-            //The transmission failed
-            LED_verde_setLow();
-        }else{
-            LED_rojo_toggle();
-        }
-        __delay_ms(10);
+        //while (!mutex);
+        //if (mutex != 1) {
+        //The transmission failed
+        //  LED_verde_setLow();
+        //} else {
+        //  LED_rojo_toggle();
+        //}
+        //__delay_ms(10);
         /*
                 if (banderInt1 == 0) {
                     for (j = 0; j < 63; j++) {

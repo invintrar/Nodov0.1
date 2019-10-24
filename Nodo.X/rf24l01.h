@@ -6,6 +6,12 @@
 #include "spi1.h"
 #include "main.h"
 
+/* Definimos Chip Select para el RF24L01*/
+#define RF24L01_CS_SetDigitalOutput()  _TRISB13 = 0
+#define RF24L01_CS_Toggle()     _LATB13 ^= 1 
+#define RF24L01_CS_SetLow()     _LATB13 = 0
+#define RF24L01_CS_SetHigh()    _LATB13 = 1
+
 /* Definimos Chip Enable para el RF24L01*/
 #define RF24L01_CE_SetDigitalOutput()  _TRISB5 = 0
 #define RF24L01_CE_Toggle()     _LATB5 ^= 1 
