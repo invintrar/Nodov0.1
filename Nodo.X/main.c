@@ -19,6 +19,8 @@ unsigned char banderInt1;
 unsigned char banderaSPI1;
 unsigned int banderCont;
 unsigned long sector;
+int ADCValue;
+float voltajeSensor;
 
 unsigned char mutex;
 
@@ -51,15 +53,17 @@ int main(void) {
     sdF.detected = 0;
     sdF.init_ok = 0;
     sdF.saving = 0;
+    int i;
+    //int continuar = 0;
     sector = 2051;
     mutex = 0;
 
     SYSTEM_Initialize();
 
     /* Incializamos la variable de la memoria a 0*/
-    //for (j = 0; j < 512; j++) {
-    //  bufferE[j] = 0;
-    //}
+    for (i = 0; i < 512; i++) {
+        bufferE[i] = 0xAA;
+    }
 
     //Configuramos  RF24L01
     //RF24L01_setup(tx_addr, rx_addr, 12);
@@ -73,7 +77,21 @@ int main(void) {
 
         LED_rojo_toggle();
 
-        /*Comprobamos que la microSD siga conectadoa*/
+        AD1CON1bits.SAMP = 1; // Start sampling
+        __delay_us(10); // Wait for sampling time (10 us)
+        AD1CON1bits.SAMP = 0; // Start the conversion
+        while (!AD1CON1bits.DONE); // Wait for the conversion to complete
+        ADCValue = ADC1BUF0; // Read the ADC conversion result
+        voltajeSensor = ADCValue * (3.3/1023);
+        /*
+        while(continuar < 511){
+            bufferE[continuar] = (ADCValue & 0x00FF);
+            bufferE[continuar+1] = (ADCValue >> 8);
+            continuar += 2;
+        }
+         */
+        
+        /*Comprobamos que la microSD siga conectada*/
         SD_Check();
         if (sdF.detected) {
             /* Compromabos si esta inicializamos*/
@@ -84,12 +102,14 @@ int main(void) {
                     SD_Led_On();
                 }
             }
+            SD_Write_Block(bufferE, sector);
+            sector++;
         } else {
             SD_Led_Off();
         }
 
         __delay_ms(250);
-        
+
         /*Set Mode RX*/
         //RF24L01_set_mode_RX();
 
@@ -159,6 +179,3 @@ int main(void) {
 
     return 0;
 }
-
-
-

@@ -12,7 +12,12 @@ void SYSTEM_Initialize(void)
     
     EXT_INT_Initialize();
     
-    /*Comprobamos que este conecto una microSD*/
+    INTERRUPT_GlobalEnable();
+    
+    /*Inicializamos el modulo ADC1*/
+    Adc1_Init();
+    
+    /*Comprobamos que este conecto una microSD y si lo esta la inicilizamos*/
     SD_Check();
     if(sdF.detected==1){
         /* Inicializamos y si es exitoso encedemos el Led,
@@ -23,11 +28,11 @@ void SYSTEM_Initialize(void)
         }       
     }
     
-    INTERRUPT_GlobalEnable();
-    
+    /* Inicializamos el acelerometro*/
     //ADXL355_Init();
     
-    RF24L01_init();
+    /* Inicializamos el modulo nRF24L01*/
+    //RF24L01_init();
 }
 
 /**

@@ -15,6 +15,7 @@
       <itemPath>sdcard.h</itemPath>
       <itemPath>spi2.h</itemPath>
       <itemPath>rf24l01.h</itemPath>
+      <itemPath>adc.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -34,6 +35,7 @@
       <itemPath>sdcard.c</itemPath>
       <itemPath>spi2.c</itemPath>
       <itemPath>rf24l01.c</itemPath>
+      <itemPath>adc.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
