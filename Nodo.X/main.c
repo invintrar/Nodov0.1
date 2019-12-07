@@ -97,17 +97,18 @@ int main(void) {
         //ADC1_SamplingStop();
         
         LATBbits.LATB6 = 0;
-        SPI2_Exchange_Byte(0x0E);
+        SPI2_Exchange_Byte(0x0F);
         vSpi2 = SPI2_Exchange_Byte(0x00);
         LATBbits.LATB6 = 1;
         
-        if (vSpi2 == 0x1C){
+        if (vSpi2 == 0xC8){
             LATAbits.LATA1 ^= 1;
             __delay_ms(250);
         }
         
         LATAbits.LATA1 = 0;
         __delay_ms(250);
+        printf("Hello Darwin");
         
         
         
