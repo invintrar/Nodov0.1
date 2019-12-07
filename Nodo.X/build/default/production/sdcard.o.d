@@ -10,5 +10,5 @@ spi1.h  \
 interrupt_manager.h  \
 ext_int.h  \
  rf24l01.h  \
-adc.h  \
+adc1.h  \
 spi2.h 

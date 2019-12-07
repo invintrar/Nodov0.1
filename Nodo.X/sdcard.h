@@ -30,7 +30,7 @@ extern sdFlags sdF;
 // Indicator led port definitions
 #define SD_Led_Tris TRISA
 #define SD_Led_Lat  LATA
-#define SD_Led_Bit  0
+#define SD_Led_Bit  1
 
 /*---------------------------------------------------------------------------
  SD Card Commands

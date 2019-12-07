@@ -11,4 +11,4 @@ sdcard.h  \
 spi2.h  \
 interrupt_manager.h  \
  rf24l01.h  \
-adc.h 
+adc1.h 

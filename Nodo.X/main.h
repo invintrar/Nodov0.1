@@ -11,13 +11,10 @@
 #define FCY 40000000
 #include <libpic30.h>//
 
-#define LED_verde_setHigh()     _LATA0 = 1
-#define LED_verde_setLow()      _LATA0 = 0
-#define LED_verde_toggle()      _LATA0 ^= 1
+#define Led_verde_setHigh()     _LATA1 = 1
+#define Led_verde_setLow()      _LATA1 = 0
+#define Led_verde_toggle()      _LATA1 ^= 1
 
-#define LED_rojo_setHigh()      _LATA1 = 1
-#define LED_rojo_setLow()       _LATA1 = 0
-#define LED_rojo_toggle()       _LATA1 ^= 1
 
 /*------------------------------------------------------------------------------
  VARIABLE DECLARATIONS

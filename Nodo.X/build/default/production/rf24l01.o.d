@@ -11,4 +11,4 @@ sdcard.h  \
 spi2.h  \
  interrupt_manager.h  \
 ext_int.h  \
-adc.h 
+adc1.h 
