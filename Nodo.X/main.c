@@ -49,6 +49,7 @@ data_received received;
  FUNCTION MAIN
  =============================================================================*/
 int main(void) {
+    unsigned char vSpi2;
     /* Direction RX*/
     //unsigned char rx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
     //unsigned char tx_addr[5] = {0x78, 0x78, 0x78, 0x78, 0x78};
@@ -81,14 +82,31 @@ int main(void) {
     /*Encendemos el ADXL255*/
     //ADXL355_Write_Byte(POWER_CTL, MEASURING);
     //__delay_ms(250);
+    
+    LATAbits.LATA1 = 1;
+    __delay_ms(250);
 
 
     while (1) {
         //mutex = 0;
         
-        ADC1_SamplingStart();
-        ADC1_SamplingStop();
+        vSpi2 = 0x00;
         
+        // Start measuring
+        //ADC1_SamplingStart();
+        //ADC1_SamplingStop();
+        
+        LATBbits.LATB6 = 0;
+        SPI2_Exchange_Byte(0x0F);
+        vSpi2 = SPI2_Exchange_Byte(0x00);
+        LATBbits.LATB6 = 1;
+        
+        if (vSpi2 == 0xC8){
+            LATAbits.LATA1 ^= 1;
+            __delay_ms(250);
+        }
+        
+        LATAbits.LATA1 = 0;
         __delay_ms(250);
         
         

@@ -6,14 +6,16 @@ void SYSTEM_Initialize(void)
     
     pines_Conf_Init();
     
-    SPI1_Init();
+    //SPI1_Init();
+    
+    SPI2_Init(FAST);
     
     INTERRUPT_Initialize();
     
     EXT_INT_Initialize();
     
     /*Inicializamos el modulo ADC1*/
-    ADC1_Initialize();
+    //ADC1_Initialize();
     
     INTERRUPT_GlobalEnable();
     

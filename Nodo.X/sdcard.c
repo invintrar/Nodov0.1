@@ -17,7 +17,7 @@ unsigned char SD_Init(void) {
     Release_SD();
 
     // Initialize SPI interface at slow speed
-    SD_SPI2_Init(SLOW);
+    SPI2_Init(SLOW);
 
     // Toggle CLK for 80 cycles with SDO high
     for (i = 0; i < 80; i++)
@@ -129,7 +129,7 @@ unsigned char SD_Init(void) {
 
     // Configure SPI to maximum speed
     Release_SD();
-    SD_SPI2_Init(FAST);
+    SPI2_Init(FAST);
 
     return SUCCESSFUL_INIT;
 

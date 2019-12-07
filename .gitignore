@@ -1,4 +1,5 @@
 Nodo.X/build/
 Nodo.X/debug/
-Nodo.X/dist/default/production/
-Nodo.X/nbproject/
+Nodo.X/build/default/
+Nodo.X/dist/default/
+Nodo.X/nbproject/private/private.xml

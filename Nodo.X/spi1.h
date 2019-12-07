@@ -11,7 +11,9 @@
  PROGRAM CONSTANTS
  ----------------------------------------------------------------------------*/
 #define	SPI1_H
-
+/*Elegir velocidad en la transmisión*/
+#define FAST 1//Frecuencia reloj 5Mhz
+#define SLOW 0//Frecuencia reloj 312.5kHz
 /*----------------------------------------------------------------------------
  FUCTION PROTOTYPES
  -----------------------------------------------------------------------------*/

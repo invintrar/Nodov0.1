@@ -9,6 +9,7 @@
 #include "ext_int.h"
 #include "rf24l01.h"
 #include "spi1.h"
+#include "spi2.h"
 #include "adc1.h"
 
 /*----------------------------------------------------------------------------

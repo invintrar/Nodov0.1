@@ -23,9 +23,9 @@
 
 
 /**
- * @param Velocidad: FAST= 5Mhz or SLOW=312.5kHz 
+ * @param Velocidad: FAST = 2Mhz or SLOW = 312.5kHz 
  */
-void SD_SPI2_Init(unsigned char);
+void SPI2_Init(unsigned char);
 
 /**
  * @param  Dato a enviar
