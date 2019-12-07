@@ -1,8 +1,8 @@
-/Nodo.X/build/default/debug/*
-/Nodo.X/build/default/production/*
-/Nodo.X/debug/default/*
-/Nodo.X/dist/default/debug/*
-/Nodo.X/dist/default/production/*
-/Nodo.X/nbproject/*
-/Nodo.X/nbproject/private/*
+Nodo.X/build/default/debug/*
+Nodo.X/build/default/production/*
+Nodo.X/debug/default/*
+Nodo.X/dist/default/debug/*
+Nodo.X/dist/default/production/*
+Nodo.X/nbproject/*
+Nodo.X/nbproject/private/*
 

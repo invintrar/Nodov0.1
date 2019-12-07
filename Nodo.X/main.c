@@ -108,7 +108,7 @@ int main(void) {
         
         LATAbits.LATA1 = 0;
         __delay_ms(250);
-        printf("Hello Darwin");
+        
         
         
         
