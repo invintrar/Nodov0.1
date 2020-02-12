@@ -29,7 +29,7 @@ void __attribute__((weak)) EX_INT1_CallBack(void) {
     Led_verde_toggle();
     //banderInt1 = 0;
     //banderCont = 0;
-    //ADXL355_Read_FIFO_Full();
+    ADXL355_Read_FIFO_Full();
 
 }
 
